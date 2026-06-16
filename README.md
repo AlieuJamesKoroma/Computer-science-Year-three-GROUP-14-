@@ -17,13 +17,17 @@
 A fully client-side web prototype for managing student attendance in academic institutions. Built with HTML, CSS, and JavaScript. All data persists in the browser's `localStorage`.
 
 ## Features
-- **Secure Login** — Admin authentication (default: admin / admin123)
+- **Secure Login** — Admin authentication with session persistence
 - **Dashboard** — Live stats for today's attendance + recent activity
 - **Student Management** — Add, search, and remove students
 - **Course Management** — Add and manage courses with academic year
 - **Attendance Tracking** — Mark Present / Absent / Late per student, per date
+- **Bulk Attendance Actions** — Mark all students as Present/Absent or clear all marks at once
+- **Edit Attendance** — Modify or remove past attendance records
 - **Reports** — Attendance percentages, filterable by course, level, and period
+- **Student Statistics** — View individual student attendance trends
 - **Export** — Download attendance data as CSV; print reports
+- **Session Restoration** — User session persists across browser reloads
 
 ## How to Run
 1. Open `index.html` in any modern web browser (Chrome, Firefox, Edge).

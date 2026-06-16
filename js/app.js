@@ -20,6 +20,8 @@ function doLogin() {
         shell.classList.add('active');
         shell.style.display = 'flex';
         document.getElementById('login-page').style.display = 'none';
+        // Save session to localStorage
+        localStorage.setItem('ams_session', JSON.stringify({ user: u, timestamp: Date.now() }));
         initApp();
     } else {
         err.style.display = 'block';
@@ -39,6 +41,21 @@ function doLogout() {
     lp.classList.add('active');
     document.getElementById('uname').value = '';
     document.getElementById('upass').value = '';
+    // Clear session from localStorage
+    localStorage.removeItem('ams_session');
+}
+
+// Restore session on page load
+function restoreSession() {
+    const session = JSON.parse(localStorage.getItem('ams_session') || 'null');
+    if (session) {
+        document.getElementById('login-page').classList.remove('active');
+        const shell = document.getElementById('app-shell');
+        shell.classList.add('active');
+        shell.style.display = 'flex';
+        document.getElementById('login-page').style.display = 'none';
+        initApp();
+    }
 }
 
 /* ============================================================
@@ -434,8 +451,109 @@ function exportCSV() {
     a.href = URL.createObjectURL(blob);
     a.download = 'attendance_report.csv';
     a.click();
-    toast('CSV exported.');
-}    a.download = 'attendance_report.csv';
-    a.click();
-    toast('CSV exported.');
+    toast('CSV exported successfully.');
 }
+
+/* ============================================================
+   BULK ATTENDANCE ACTIONS (NEW FEATURE)
+   ============================================================ */
+function markAllPresent() {
+    const course = document.getElementById('att-course').value;
+    const level = document.getElementById('att-level').value;
+    const date = document.getElementById('att-date').value || new Date().toISOString().split('T')[0];
+    const students = db.students.filter(s => {
+        if (course && s.course !== course) return false;
+        if (level && s.level !== level) return false;
+        return true;
+    });
+    if (!students.length) { toast('No students to mark.'); return; }
+    if (!pendingAtt[date]) pendingAtt[date] = {};
+    students.forEach(s => pendingAtt[date][s.id] = 'Present');
+    updateAttSummary(students, date);
+    renderAttendance();
+    toast(`All ${students.length} students marked as Present.`);
+}
+
+function markAllAbsent() {
+    const course = document.getElementById('att-course').value;
+    const level = document.getElementById('att-level').value;
+    const date = document.getElementById('att-date').value || new Date().toISOString().split('T')[0];
+    const students = db.students.filter(s => {
+        if (course && s.course !== course) return false;
+        if (level && s.level !== level) return false;
+        return true;
+    });
+    if (!students.length) { toast('No students to mark.'); return; }
+    if (!pendingAtt[date]) pendingAtt[date] = {};
+    students.forEach(s => pendingAtt[date][s.id] = 'Absent');
+    updateAttSummary(students, date);
+    renderAttendance();
+    toast(`All ${students.length} students marked as Absent.`);
+}
+
+function clearAllMarks() {
+    const date = document.getElementById('att-date').value || new Date().toISOString().split('T')[0];
+    const course = document.getElementById('att-course').value;
+    const level = document.getElementById('att-level').value;
+    const students = db.students.filter(s => {
+        if (course && s.course !== course) return false;
+        if (level && s.level !== level) return false;
+        return true;
+    });
+    if (!students.length) { toast('No students to clear.'); return; }
+    if (!pendingAtt[date]) pendingAtt[date] = {};
+    students.forEach(s => pendingAtt[date][s.id] = null);
+    document.getElementById('att-summary').textContent = '';
+    renderAttendance();
+    toast(`Cleared marks for ${students.length} students.`);
+}
+
+/* ============================================================
+   EDIT ATTENDANCE RECORDS (NEW FEATURE)
+   ============================================================ */
+function editAttendanceRecord(studentId, date) {
+    const status = prompt('Enter new status (Present, Absent, Late, or leave blank to remove):', '');
+    if (status === null) return;
+
+    if (status === '') {
+        db.attendance = db.attendance.filter(a => !(a.studentId === studentId && a.date === date));
+    } else if (['Present', 'Absent', 'Late'].includes(status)) {
+        const idx = db.attendance.findIndex(a => a.studentId === studentId && a.date === date);
+        if (idx >= 0) {
+            db.attendance[idx].status = status;
+        } else {
+            const student = db.students.find(s => s.id === studentId);
+            if (student) {
+                db.attendance.push({ studentId, date, status, course: student.course, level: student.level });
+            }
+        }
+    } else {
+        toast('Invalid status. Use: Present, Absent, or Late');
+        return;
+    }
+    saveDB();
+    renderDashboard();
+    renderReports();
+    toast('Attendance record updated.');
+}
+
+/* ============================================================
+   STUDENT STATISTICS (NEW FEATURE)
+   ============================================================ */
+function getStudentStats(studentId) {
+    const recs = db.attendance.filter(a => a.studentId === studentId);
+    const total = recs.length;
+    const present = recs.filter(r => r.status === 'Present').length;
+    const absent = recs.filter(r => r.status === 'Absent').length;
+    const late = recs.filter(r => r.status === 'Late').length;
+    const pct = total ? Math.round((present / total) * 100) : 0;
+    return { total, present, absent, late, percentage: pct };
+}
+
+/* ============================================================
+   ENHANCED INITIALIZATION
+   ============================================================ */
+window.addEventListener('load', () => {
+    // Try to restore session on page load
+    restoreSession();
+});

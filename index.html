@@ -136,6 +136,11 @@
                         <input type="date" id="att-date" onchange="renderAttendance()" class="date-input" />
                         <button class="btn btn-primary save-btn" onclick="saveAttendance()"><i class="ti ti-device-floppy"></i>Save attendance</button>
                     </div>
+                    <div class="bulk-actions" style="margin-bottom:12px;display:flex;gap:8px">
+                        <button class="btn btn-outline" onclick="markAllPresent()" title="Mark all visible students as Present"><i class="ti ti-check"></i>All Present</button>
+                        <button class="btn btn-outline" onclick="markAllAbsent()" title="Mark all visible students as Absent"><i class="ti ti-x"></i>All Absent</button>
+                        <button class="btn btn-outline" onclick="clearAllMarks()" title="Clear all marks for visible students"><i class="ti ti-refresh"></i>Clear All</button>
+                    </div>
                     <div class="card">
                         <div class="card-header">
                             <h3 id="att-label">Today's attendance</h3>

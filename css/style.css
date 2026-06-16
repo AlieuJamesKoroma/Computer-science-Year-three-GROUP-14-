@@ -703,6 +703,25 @@ tr:hover td {
 }
 
 
+/* ---- BULK ACTIONS ---- */
+
+.bulk-actions {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 10px 12px;
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    margin-bottom: 16px;
+}
+
+.bulk-actions .btn {
+    padding: 6px 12px;
+    font-size: 12px;
+}
+
+
 /* ---- PRINT ---- */
 
 @media print {
