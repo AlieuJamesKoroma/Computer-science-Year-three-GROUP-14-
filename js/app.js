@@ -7,7 +7,7 @@
 /* ============================================================
    AUTH
    ============================================================ */
-const CREDS = { user: 'admin', pass: 'admin123' };
+const CREDS = { user: 'Lecturer', pass: 'admin123' };
 let pendingAtt = {};
 
 function doLogin() {
