@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Student Attendance Management System</title>
+    <link rel="stylesheet" href="css/style.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.44.0/tabler-icons.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet" />
+</head>
+
+<body>
+
+    <!-- LOGIN PAGE -->
+    <div id="login-page" class="page active">
+        <div class="login-card">
+            <div class="login-logo">
+                <div class="icon-wrap"><i class="ti ti-school"></i></div>
+                <h1>Attendance System</h1>
+                <p>University of Makeni — CS Dept.</p>
+            </div>
+            <div class="field">
+                <label>Username</label>
+                <input type="text" id="uname" placeholder="admin" autocomplete="username" />
+            </div>
+            <div class="field">
+                <label>Password</label>
+                <input type="password" id="upass" placeholder="••••••••" autocomplete="current-password" />
+            </div>
+            <button class="login-btn" onclick="doLogin()">Sign in</button>
+            <p class="err-msg" id="login-err">Invalid credentials. Try admin / admin123</p>
+            <p class="hint">Demo: admin / admin123</p>
+        </div>
+    </div>
+
+    <!-- APP SHELL -->
+    <div id="app-shell">
+        <div class="topbar">
+            <div class="topbar-left">
+                <i class="ti ti-school"></i>
+                <span>Student Attendance Management</span>
+            </div>
+            <div class="topbar-right" onclick="doLogout()">
+                <i class="ti ti-logout"></i> Logout
+            </div>
+        </div>
+        <div class="layout">
+            <div class="sidebar">
+                <div class="nav-item active" data-sec="dashboard" onclick="showSection(this,'dashboard')"><i class="ti ti-layout-dashboard"></i>Dashboard</div>
+                <div class="nav-item" data-sec="students" onclick="showSection(this,'students')"><i class="ti ti-users"></i>Students</div>
+                <div class="nav-item" data-sec="courses" onclick="showSection(this,'courses')"><i class="ti ti-book"></i>Courses</div>
+                <div class="nav-item" data-sec="attendance" onclick="showSection(this,'attendance')"><i class="ti ti-checkbox"></i>Attendance</div>
+                <div class="nav-item" data-sec="reports" onclick="showSection(this,'reports')"><i class="ti ti-chart-bar"></i>Reports</div>
+            </div>
+            <div class="main">
+
+                <!-- DASHBOARD -->
+                <div class="section active" id="sec-dashboard">
+                    <div class="section-title">Dashboard</div>
+                    <div class="stats-grid" id="stats-grid"></div>
+                    <div class="card">
+                        <div class="card-header">
+                            <h3>Recent attendance activity</h3>
+                        </div>
+                        <div id="recent-table-wrap"></div>
+                    </div>
+                </div>
+
+                <!-- STUDENTS -->
+                <div class="section" id="sec-students">
+                    <div class="section-title">Student Management</div>
+                    <div class="card form-card">
+                        <div class="form-section-label">ADD NEW STUDENT</div>
+                        <div class="form-row">
+                            <div class="form-group"><label>Student ID</label><input type="text" id="s-id" placeholder="e.g. 9913" /></div>
+                            <div class="form-group"><label>Full Name</label><input type="text" id="s-name" placeholder="Full name" /></div>
+                            <div class="form-group"><label>Course</label><select id="s-course"><option value="">Select course</option></select></div>
+                            <div class="form-group"><label>Level</label>
+                                <select id="s-level">
+                <option value="Year 1">Year 1</option>
+                <option value="Year 2">Year 2</option>
+                <option value="Year 3" selected>Year 3</option>
+                <option value="Year 4">Year 4</option>
+              </select>
+                            </div>
+                        </div>
+                        <button class="btn btn-primary" onclick="addStudent()"><i class="ti ti-plus"></i>Add Student</button>
+                    </div>
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 id="student-count-label">All students</h3>
+                            <input type="text" placeholder="Search students…" id="student-search" oninput="renderStudents()" class="search-input" />
+                        </div>
+                        <div id="student-table-wrap"></div>
+                    </div>
+                </div>
+
+                <!-- COURSES -->
+                <div class="section" id="sec-courses">
+                    <div class="section-title">Course Management</div>
+                    <div class="card form-card">
+                        <div class="form-section-label">ADD NEW COURSE</div>
+                        <div class="form-row">
+                            <div class="form-group"><label>Course Code</label><input type="text" id="c-code" placeholder="e.g. CS301" /></div>
+                            <div class="form-group"><label>Course Name</label><input type="text" id="c-name" placeholder="Course name" /></div>
+                            <div class="form-group"><label>Academic Year</label>
+                                <select id="c-year">
+                <option value="2024/2025">2024/2025</option>
+                <option value="2025/2026" selected>2025/2026</option>
+              </select>
+                            </div>
+                        </div>
+                        <button class="btn btn-primary" onclick="addCourse()"><i class="ti ti-plus"></i>Add Course</button>
+                    </div>
+                    <div class="card">
+                        <div class="card-header">
+                            <h3>All courses</h3>
+                        </div>
+                        <div id="course-table-wrap"></div>
+                    </div>
+                </div>
+
+                <!-- ATTENDANCE -->
+                <div class="section" id="sec-attendance">
+                    <div class="section-title">Mark Attendance</div>
+                    <div class="filter-row">
+                        <select id="att-course" onchange="renderAttendance()"><option value="">All courses</option></select>
+                        <select id="att-level" onchange="renderAttendance()">
+            <option value="">All levels</option>
+            <option value="Year 1">Year 1</option>
+            <option value="Year 2">Year 2</option>
+            <option value="Year 3">Year 3</option>
+            <option value="Year 4">Year 4</option>
+          </select>
+                        <input type="date" id="att-date" onchange="renderAttendance()" class="date-input" />
+                        <button class="btn btn-primary save-btn" onclick="saveAttendance()"><i class="ti ti-device-floppy"></i>Save attendance</button>
+                    </div>
+                    <div class="bulk-actions" style="margin-bottom:12px;display:flex;gap:8px">
+                        <button class="btn btn-outline" onclick="markAllPresent()" title="Mark all visible students as Present"><i class="ti ti-check"></i>All Present</button>
+                        <button class="btn btn-outline" onclick="markAllAbsent()" title="Mark all visible students as Absent"><i class="ti ti-x"></i>All Absent</button>
+                        <button class="btn btn-outline" onclick="clearAllMarks()" title="Clear all marks for visible students"><i class="ti ti-refresh"></i>Clear All</button>
+                    </div>
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 id="att-label">Today's attendance</h3>
+                            <span id="att-summary" class="att-summary"></span>
+                        </div>
+                        <div id="att-table-wrap"></div>
+                    </div>
+                </div>
+
+                <!-- REPORTS -->
+                <div class="section" id="sec-reports">
+                    <div class="section-title">Attendance Reports</div>
+                    <div class="filter-row">
+                        <select id="r-course" onchange="renderReports()"><option value="">All courses</option></select>
+                        <select id="r-level" onchange="renderReports()">
+            <option value="">All levels</option>
+            <option value="Year 1">Year 1</option>
+            <option value="Year 2">Year 2</option>
+            <option value="Year 3">Year 3</option>
+            <option value="Year 4">Year 4</option>
+          </select>
+                        <select id="r-period" onchange="renderReports()">
+            <option value="all">All time</option>
+            <option value="today">Today</option>
+            <option value="week">This week</option>
+            <option value="month">This month</option>
+          </select>
+                    </div>
+                    <div class="export-row">
+                        <button class="btn btn-outline" onclick="exportCSV()"><i class="ti ti-file-spreadsheet"></i>Export CSV</button>
+                        <button class="btn btn-outline" onclick="window.print()"><i class="ti ti-printer"></i>Print report</button>
+                    </div>
+                    <div class="card">
+                        <div class="card-header">
+                            <h3>Attendance summary by student</h3>
+                        </div>
+                        <div id="report-table-wrap"></div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <div id="toast"></div>
+
+    <script src="js/db.js"></script>
+    <script src="js/app.js"></script>
+</body>
+
+</html>
