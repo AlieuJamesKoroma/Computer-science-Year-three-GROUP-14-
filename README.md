@@ -16,48 +16,29 @@
 ## Overview
 A fully client-side web prototype for managing student attendance in academic institutions. Built with HTML, CSS, and JavaScript. All data persists in the browser's `localStorage`.
 
-## Features
-- **Secure Login** — Admin authentication with session persistence
-- **Dashboard** — Live stats for today's attendance + recent activity
-- **Student Management** — Add, search, and remove students
-- **Course Management** — Add and manage courses with academic year
-- **Attendance Tracking** — Mark Present / Absent / Late per student, per date
-- **Bulk Attendance Actions** — Mark all students as Present/Absent or clear all marks at once
-- **Edit Attendance** — Modify or remove past attendance records
-- **Reports** — Attendance percentages, filterable by course, level, and period
-- **Student Statistics** — View individual student attendance trends
-- **Export** — Download attendance data as CSV; print reports
-- **Session Restoration** — User session persists across browser reloads
+## Key Features
+- **Role‑Based Access** — Lecturers and students have separate dashboards and permissions.
+- **Student Registration** — Students can create their own accounts with email, password, and personal details.
+- **Secure Login** — Both lecturers and students log in with email and password. Session persists across reloads.
+- **Lecturer Dashboard** — Overview of total students and today's attendance stats, plus recent activity.
+- **Student Dashboard** — Personal attendance summary and recent records.
+- **Student Management (Lecturer)** — Add, search, and remove students. Adding a student automatically creates a login account (default password: `student123`).
+- **Course Management (Lecturer)** — Add and manage courses with academic year.
+- **Attendance Tracking (Lecturer)** — Mark Present / Absent / Late per student, per date. Bulk actions (All Present, All Absent, Clear All).
+- **My Attendance (Student)** — Students can view and filter their own attendance records by course and date.
+- **Reports (Lecturer)** — Attendance percentages, filterable by course, level, and period. Export as CSV or print.
+- **Profile Page** — Both roles can view their profile and (for students) see their attendance statistics.
+- **Session Restoration** — User session persists across browser reloads.
 
 ## How to Run
 1. Open `index.html` in any modern web browser (Chrome, Firefox, Edge).
 2. No server or installation required.
-3. Login with: **username:** `admin` | **password:** `admin123`
+3. **Default Lecturer Login:**  
+   - Email: `admin@unimak.edu.sl`  
+   - Password: `admin123`
+4. **Sample Student Logins:**  
+   - Email: `9912@unimak.edu.sl` (or any student ID + `@unimak.edu.sl`)  
+   - Password: `student123`  
+   (Students can also register themselves.)
 
 ## Project Structure
-```
-attendance_system/
-├── index.html          — Main HTML structure
-├── css/
-│   └── style.css       — All styles
-├── js/
-│   ├── db.js           — Data layer (localStorage)
-│   └── app.js          — Application logic
-└── README.md
-```
-
-## Technologies Used
-- HTML5
-- CSS3 (CSS Variables, Flexbox, Grid)
-- Vanilla JavaScript (ES6+)
-- localStorage for data persistence
-- Tabler Icons (CDN)
-- DM Sans & DM Mono fonts (Google Fonts)
-
-## Default Credentials
-| Username | Password |
-|---|---|
-| admin | admin123 |
-
----
-*Submitted: March 2026*

@@ -53,9 +53,13 @@ body {
 }
 
 
-/* ---- LOGIN ---- */
+/* ---- LOGIN & REGISTER ---- */
 
 #login-page {
+    background: linear-gradient(135deg, #1e3a8a 0%, #1D4ED8 50%, #2563EB 100%);
+}
+
+#register-page {
     background: linear-gradient(135deg, #1e3a8a 0%, #1D4ED8 50%, #2563EB 100%);
 }
 
@@ -64,6 +68,7 @@ body {
     border-radius: 16px;
     padding: 40px;
     width: 360px;
+    max-width: 95%;
     box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
 }
 
@@ -159,6 +164,16 @@ body {
     color: var(--muted);
     text-align: center;
     margin-top: 12px;
+}
+
+.hint a {
+    color: var(--brand);
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.hint a:hover {
+    text-decoration: underline;
 }
 
 
@@ -352,6 +367,8 @@ body {
     display: flex;
     align-items: center;
     justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 8px;
 }
 
 .card-header h3 {
@@ -617,7 +634,8 @@ tr:hover td {
     flex-wrap: wrap;
 }
 
-.filter-row select {
+.filter-row select,
+.filter-row input {
     padding: 7px 10px;
     border: 1px solid var(--border);
     border-radius: 7px;
@@ -645,6 +663,7 @@ tr:hover td {
     display: flex;
     gap: 8px;
     margin-bottom: 14px;
+    flex-wrap: wrap;
 }
 
 
@@ -714,11 +733,20 @@ tr:hover td {
     gap: 8px;
     align-items: center;
     margin-bottom: 16px;
+    flex-wrap: wrap;
 }
 
 .bulk-actions .btn {
     padding: 6px 12px;
     font-size: 12px;
+}
+
+
+/* ---- PROFILE ---- */
+
+#profile-content .form-group input[disabled] {
+    background: var(--bg);
+    color: var(--text);
 }
 
 
@@ -744,7 +772,10 @@ tr:hover td {
     #sec-dashboard,
     #sec-students,
     #sec-courses,
-    #sec-attendance {
-        display: none !important;
+    #sec-attendance,
+    #sec-reports,
+    #sec-my-attendance,
+    #sec-profile {
+        display: block !important;
     }
 }
